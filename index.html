@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>班級破冰猜題遊戲</title>
+  <style>
+    body {
+      font-family: 'Microsoft JhengHei', Arial, sans-serif;
+      background: linear-gradient(120deg, #FFDEE9, #B5FFFC);
+      text-align: center;
+      padding: 30px;
+    }
+
+    h1 { 
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      color: #555;
+      margin-top: 0;
+    }
+
+    #question-number {
+      font-size: 18px;
+      margin-bottom: 10px;
+      color: #666;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 20px;
+    }
+
+    li {
+      background: rgba(255,255,255,0.7);
+      margin: 8px 0;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 18px;
+      transition: background 0.3s;
+    }
+
+    li:hover {
+      background: rgba(255,255,255,0.9);
+    }
+
+    #answer {
+      color: #008000;
+      font-size: 22px;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+
+    button {
+      margin: 5px;
+      padding: 12px 25px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    button:hover {
+      opacity: 0.8;
+    }
+
+    #showAnswerBtn { background-color: #FFB347; }
+    #nextQuestionBtn { background-color: #00CFFF; color: white; }
+    #restartBtn { background-color: #FF6B6B; color: white; }
+
+  </style>
+</head>
+<body>
+
+  <h1>班級破冰猜題遊戲</h1>
+  <h2>猜猜看這題是什麼？</h2>
+  <div id="question-number"></div>
+  <ul>
+    <li id="hint1"></li>
+    <li id="hint2"></li>
+    <li id="hint3"></li>
+    <li id="hint4"></li>
+  </ul>
+
+  <button id="showAnswerBtn" onclick="showAnswer()">顯示答案</button>
+  <button id="nextQuestionBtn" onclick="nextQuestion()">下一題</button>
+  <button id="restartBtn" onclick="restartGame()">重新開始</button>
+
+  <div id="answer" style="display:none;"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
