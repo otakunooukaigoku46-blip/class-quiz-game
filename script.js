@@ -9,6 +9,7 @@ let usedIndexes = [];
 fetch(DATA_URL)
   .then(res => res.json())
   .then(data => {
+    console.log(data);
     questions = data;
     nextQuestion();
   })
@@ -74,6 +75,7 @@ function updateProgress() {
 function toggleAnswer() {
   document.getElementById("answer").classList.toggle("hidden");
 }
+
 
 
 
