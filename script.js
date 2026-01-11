@@ -1,3 +1,4 @@
+// ✅ 1. API 網址
 const DATA_URL = "https://script.google.com/macros/s/AKfycbwRxWgKMfugcZTtjOvMGoOLNSfPOxI2HUymbV7JWrIabpA98ciDE3lgEVfUteQxXPDG/exec";
 
 let questions = [];
@@ -6,7 +7,7 @@ let currentQuestion = null;
 let usedHints = [false, false, false, false, false];
 let usedIndexes = [];
 
-// 讀取題庫
+// ✅ 2. 讀取題庫
 fetch(DATA_URL)
   .then(response => response.json())
   .then(data => {
@@ -19,6 +20,7 @@ fetch(DATA_URL)
     alert("無法讀取題庫，請檢查 API");
   });
 
+// ✅ 3. 下一題
 function nextQuestion() {
   if (!questions || questions.length === 0) {
     alert("目前沒有題目");
@@ -45,11 +47,13 @@ function nextQuestion() {
 
   usedHints = [false, false, false, false, false];
 
+  // 重置按鈕樣式
   document.querySelectorAll("#hint-buttons button").forEach(btn => {
     btn.disabled = false;
     btn.classList.remove("used");
   });
 
+  // 清空提示與答案顯示
   document.getElementById("hint-display").textContent = "";
   document.getElementById("answer").textContent = currentQuestion.answer;
   document.getElementById("answer").classList.add("hidden");
@@ -58,12 +62,16 @@ function nextQuestion() {
   updateProgress();
 }
 
+// ✅ 4. 顯示提示
 function showHint(index) {
   if (usedHints[index]) return;
 
   const hint = currentQuestion.hints[index] || "（沒有提示）";
+  const hintDisplay = document.getElementById("hint-display");
 
-  document.getElementById("hint-display").textContent = hint;
+  // 如果還有舊提示，就換行追加
+  hintDisplay.textContent += hintDisplay.textContent ? "\n" + hint : hint;
+
   usedHints[index] = true;
 
   const btn = document.querySelectorAll("#hint-buttons button")[index];
@@ -73,19 +81,20 @@ function showHint(index) {
   updateHintCounter();
 }
 
+// ✅ 5. 更新提示使用計數
 function updateHintCounter() {
   const count = usedHints.filter(v => v).length;
   document.getElementById("hint-counter").textContent =
     "已使用提示：" + count + " / 5";
 }
 
+// ✅ 6. 更新題目進度
 function updateProgress() {
   document.getElementById("progress").textContent =
     "第 " + usedIndexes.length + " 題 / 共 " + questions.length + " 題";
 }
 
+// ✅ 7. 顯示 / 隱藏答案
 function toggleAnswer() {
   document.getElementById("answer").classList.toggle("hidden");
 }
-
-
