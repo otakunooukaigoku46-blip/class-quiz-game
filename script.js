@@ -1,23 +1,30 @@
-const DATA_URL = "https://script.google.com/macros/s/AKfycbyMLK8_dF-xjfJ3EdeDPNa0_sLtE-9vTO-Or4O3ovA/dev";
+const DATA_URL = "https://script.google.com/macros/s/AKfycbwTIXsh9Fhywr8A70ObdW33ob-cLRgndUfL_3oA49mNnLGNxsnkuwIl1hTJVuXNx9Pl/exec";
+
 let questions = [];
 let currentIndex = -1;
 let currentQuestion = null;
 let usedHints = [false, false, false, false, false];
 let usedIndexes = [];
 
-// 載入題庫
+// 讀取題庫
 fetch(DATA_URL)
-  .then(res => res.json())
+  .then(response => response.json())
   .then(data => {
-    console.log(data);
+    console.log("API data:", data);
     questions = data;
     nextQuestion();
   })
-  .catch(() => {
-    alert("無法讀取題庫，請檢查連結");
+  .catch(error => {
+    console.error(error);
+    alert("無法讀取題庫，請檢查 API");
   });
 
 function nextQuestion() {
+  if (!questions || questions.length === 0) {
+    alert("目前沒有題目");
+    return;
+  }
+
   if (usedIndexes.length === questions.length) {
     alert("題目已全部完成！");
     return;
@@ -28,18 +35,24 @@ function nextQuestion() {
   } while (usedIndexes.includes(currentIndex));
 
   usedIndexes.push(currentIndex);
-  currentQuestion = questions[currentIndex];
 
-  // 重置提示狀態
+  const q = questions[currentIndex];
+
+  currentQuestion = {
+    hints: q.hints || q.slice(0, 5),
+    answer: q.answer || q[5]
+  };
+
   usedHints = [false, false, false, false, false];
+
   document.querySelectorAll("#hint-buttons button").forEach(btn => {
     btn.disabled = false;
     btn.classList.remove("used");
   });
 
   document.getElementById("hint-display").textContent = "";
-  document.getElementById("answer").classList.add("hidden");
   document.getElementById("answer").textContent = currentQuestion.answer;
+  document.getElementById("answer").classList.add("hidden");
 
   updateHintCounter();
   updateProgress();
@@ -48,8 +61,7 @@ function nextQuestion() {
 function showHint(index) {
   if (usedHints[index]) return;
 
-  const hint = currentQuestion.hints[index];
-  if (!hint) return;
+  const hint = currentQuestion.hints[index] || "（沒有提示）";
 
   document.getElementById("hint-display").textContent = hint;
   usedHints[index] = true;
@@ -64,19 +76,14 @@ function showHint(index) {
 function updateHintCounter() {
   const count = usedHints.filter(v => v).length;
   document.getElementById("hint-counter").textContent =
-    `已使用提示：${count} / 5`;
+    "已使用提示：" + count + " / 5";
 }
 
 function updateProgress() {
   document.getElementById("progress").textContent =
-    `第 ${usedIndexes.length} 題 / 共 ${questions.length} 題`;
+    "第 " + usedIndexes.length + " 題 / 共 " + questions.length + " 題";
 }
 
 function toggleAnswer() {
   document.getElementById("answer").classList.toggle("hidden");
 }
-
-
-
-
-
