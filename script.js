@@ -1,61 +1,77 @@
-body {
-  font-family: "Microsoft JhengHei", sans-serif;
-  text-align: center;
-  background: #f7f7f7;
-  padding: 30px;
+const DATA_URL = "https://script.google.com/macros/s/AKfycbyJIARJbCYSCpLMhDggBvqK0d5aaIjbTFdr2GnLYyaped_7h7j3eHRwHaRZdbN1O-RmAg/exec";
+
+let questions = [];
+let currentIndex = -1;
+let currentQuestion = null;
+let usedHints = [false, false, false, false, false];
+let usedIndexes = [];
+
+// 載入題庫
+fetch(DATA_URL)
+  .then(res => res.json())
+  .then(data => {
+    questions = data;
+    nextQuestion();
+  })
+  .catch(() => {
+    alert("無法讀取題庫，請檢查連結");
+  });
+
+function nextQuestion() {
+  if (usedIndexes.length === questions.length) {
+    alert("題目已全部完成！");
+    return;
+  }
+
+  do {
+    currentIndex = Math.floor(Math.random() * questions.length);
+  } while (usedIndexes.includes(currentIndex));
+
+  usedIndexes.push(currentIndex);
+  currentQuestion = questions[currentIndex];
+
+  // 重置提示狀態
+  usedHints = [false, false, false, false, false];
+  document.querySelectorAll("#hint-buttons button").forEach(btn => {
+    btn.disabled = false;
+    btn.classList.remove("used");
+  });
+
+  document.getElementById("hint-display").textContent = "";
+  document.getElementById("answer").classList.add("hidden");
+  document.getElementById("answer").textContent = currentQuestion.answer;
+
+  updateHintCounter();
+  updateProgress();
 }
 
-h1 {
-  font-size: 42px;
-  margin-bottom: 10px;
+function showHint(index) {
+  if (usedHints[index]) return;
+
+  const hint = currentQuestion.hints[index];
+  if (!hint) return;
+
+  document.getElementById("hint-display").textContent = hint;
+  usedHints[index] = true;
+
+  const btn = document.querySelectorAll("#hint-buttons button")[index];
+  btn.disabled = true;
+  btn.classList.add("used");
+
+  updateHintCounter();
 }
 
-#progress {
-  font-size: 20px;
-  margin-bottom: 20px;
+function updateHintCounter() {
+  const count = usedHints.filter(v => v).length;
+  document.getElementById("hint-counter").textContent =
+    `已使用提示：${count} / 5`;
 }
 
-#hint-buttons button {
-  font-size: 20px;
-  margin: 6px;
-  padding: 10px 18px;
+function updateProgress() {
+  document.getElementById("progress").textContent =
+    `第 ${usedIndexes.length} 題 / 共 ${questions.length} 題`;
 }
 
-#hint-buttons button.used {
-  background-color: #ccc;
-  color: #666;
-  cursor: not-allowed;
-}
-
-#hint-display {
-  margin-top: 25px;
-  font-size: 32px;
-  font-weight: bold;
-  min-height: 50px;
-}
-
-#hint-counter {
-  margin-top: 10px;
-  font-size: 18px;
-}
-
-.controls {
-  margin-top: 25px;
-}
-
-.controls button {
-  font-size: 18px;
-  padding: 8px 16px;
-  margin: 0 10px;
-}
-
-#answer {
-  margin-top: 30px;
-  font-size: 36px;
-  color: #d9534f;
-  font-weight: bold;
-}
-
-.hidden {
-  display: none;
+function toggleAnswer() {
+  document.getElementById("answer").classList.toggle("hidden");
 }
