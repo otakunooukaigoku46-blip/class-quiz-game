@@ -1,4 +1,4 @@
-const DATA_URL = "請貼上你的 Apps Script Web App URL";
+const DATA_URL = "https://script.google.com/macros/s/AKfycbyJIARJbCYSCpLMhDggBvqK0d5aaIjbTFdr2GnLYyaped_7h7j3eHRwHaRZdbN1O-RmAg/exec";
 
 let questions = [];
 let currentIndex = -1;
@@ -75,3 +75,4 @@ function updateProgress() {
 function toggleAnswer() {
   document.getElementById("answer").classList.toggle("hidden");
 }
+
