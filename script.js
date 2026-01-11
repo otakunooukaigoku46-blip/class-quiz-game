@@ -1,4 +1,4 @@
-const DATA_URL = "https://docs.google.com/spreadsheets/d/1nl84swTkmWHoup3OamRgl9X27-kQsQryLw8egpzlO0I/gviz/tq?tqx=out:csvhttps://script.google.com/macros/s/AKfycbwTIXsh9Fhywr8A70ObdW33ob-cLRgndUfL_3oA49mNnLGNxsnkuwIl1hTJVuXNx9Pl/exec
+const DATA_URL = "https://script.google.com/macros/s/AKfycbyMLK8_dF-xjfJ3EdeDPNa0_sLtE-9vTO-Or4O3ovA/dev"
 let questions = [];
 let currentIndex = -1;
 let currentQuestion = null;
@@ -74,5 +74,6 @@ function updateProgress() {
 function toggleAnswer() {
   document.getElementById("answer").classList.toggle("hidden");
 }
+
 
 
